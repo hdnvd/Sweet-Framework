@@ -20,6 +20,39 @@ class ComboBox extends baseHTMLElement {
 	private $Multiselectable;
 	private $MotherComboboxName;
 	private $MotherComboboxAutoLoadMode;
+    private $DataLoadJSONURL;
+
+    /**
+     * @return mixed
+     */
+    public function getDataLoadJSONURL()
+    {
+        return $this->DataLoadJSONURL;
+    }
+
+    /**
+     * @param mixed $DataLoadJSONURL
+     */
+    public function setDataLoadJSONURL($DataLoadJSONURL)
+    {
+        $this->DataLoadJSONURL = $DataLoadJSONURL;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMotherComboboxAutoLoadMode()
+    {
+        return $this->MotherComboboxAutoLoadMode;
+    }
+
+    /**
+     * @param int $MotherComboboxAutoLoadMode
+     */
+    public function setMotherComboboxAutoLoadMode($MotherComboboxAutoLoadMode)
+    {
+        $this->MotherComboboxAutoLoadMode = $MotherComboboxAutoLoadMode;
+    }
 	public static $AUTOLOADMODE_ONPAGE=1;
     public static $AUTOLOADMODE_AJAX=2;
 	/**
@@ -43,6 +76,7 @@ class ComboBox extends baseHTMLElement {
 		$this->setName($name);
 		$this->setId($name);
 		$this->MotherComboboxAutoLoadMode=ComboBox::$AUTOLOADMODE_ONPAGE;
+		$this->DataLoadJSONURL=null;
 	}
 
     /**
@@ -153,15 +187,20 @@ class ComboBox extends baseHTMLElement {
             }
         }
         if($this->MotherComboboxName!="") {
-            if($this->MotherComboboxAutoLoadMode==ComboBox::$AUTOLOADMODE_ONPAGE)
-            {
                 $theMotherCombobox="\$(\"[name=" . $this->MotherComboboxName . "]\")";
                 $html .= $theMotherCombobox . ".change(function() {\n";
                 $html.="\tvar gid=$theMotherCombobox" . ".val();\n";
-                $html .= "\tloadSelectItems('". $this->getName() . "',$varName2" . "[gid]);\n";
+
+            if($this->MotherComboboxAutoLoadMode==ComboBox::$AUTOLOADMODE_ONPAGE) {
+                $html .= "\tloadSelectItems('" . $this->getName() . "',$varName2" . "[gid]);\n";
+            }
+            else
+            {
+                $html .= "\tLoadJSON2Select('" . $this->getName() . "','" . $this->DataLoadJSONURL  . $this->MotherComboboxName . "_id='+ gid);\n";
+            }
 //            $html .= "\talert( \"Handler for .change() called.\" );\n";
                 $html .= "});";
-            }
+
         }
         $html.="</script>";
         return $html;
