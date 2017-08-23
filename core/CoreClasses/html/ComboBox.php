@@ -187,10 +187,10 @@ class ComboBox extends baseHTMLElement {
             }
         }
         if($this->MotherComboboxName!="") {
-                $theMotherCombobox="\$(\"[name=" . $this->MotherComboboxName . "]\")";
-                $html .= $theMotherCombobox . ".change(function() {\n";
-                $html.="\tvar gid=$theMotherCombobox" . ".val();\n";
-
+            $theMotherCombobox="\$(\"[name=" . $this->MotherComboboxName . "]\")";
+            $funcName="load" . $this->getName() ;
+            $html.="function " . $funcName ."() {\n";
+            $html.="\tvar gid=$theMotherCombobox" . ".val();\n";
             if($this->MotherComboboxAutoLoadMode==ComboBox::$AUTOLOADMODE_ONPAGE) {
                 $html .= "\tloadSelectItems('" . $this->getName() . "',$varName2" . "[gid]);\n";
             }
@@ -198,8 +198,9 @@ class ComboBox extends baseHTMLElement {
             {
                 $html .= "\tLoadJSON2Select('" . $this->getName() . "','" . $this->DataLoadJSONURL  . $this->MotherComboboxName . "_id='+ gid);\n";
             }
-//            $html .= "\talert( \"Handler for .change() called.\" );\n";
-                $html .= "});";
+            $html .= "}\n";
+//            $html.=$funcName . "();\n";
+            $html .= $theMotherCombobox . ".change($funcName);";
 
         }
         $html.="</script>";
