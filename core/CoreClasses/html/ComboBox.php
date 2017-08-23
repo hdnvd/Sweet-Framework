@@ -19,6 +19,9 @@ class ComboBox extends baseHTMLElement {
 	private $selectedValue;
 	private $Multiselectable;
 	private $MotherComboboxName;
+	private $MotherComboboxAutoLoadMode;
+	public static $AUTOLOADMODE_ONPAGE=1;
+    public static $AUTOLOADMODE_AJAX=2;
 	/**
 	 * (non-PHPdoc)
 	 *
@@ -39,6 +42,7 @@ class ComboBox extends baseHTMLElement {
 		$this->MotherComboboxName=null;
 		$this->setName($name);
 		$this->setId($name);
+		$this->MotherComboboxAutoLoadMode=ComboBox::$AUTOLOADMODE_ONPAGE;
 	}
 
     /**
@@ -149,12 +153,15 @@ class ComboBox extends baseHTMLElement {
             }
         }
         if($this->MotherComboboxName!="") {
-            $theMotherCombobox="\$(\"[name=" . $this->MotherComboboxName . "]\")";
-            $html .= $theMotherCombobox . ".change(function() {\n";
-            $html.="\tvar gid=$theMotherCombobox" . ".val();\n";
-            $html .= "\tloadSelectItems('". $this->getName() . "',$varName2" . "[gid]);\n";
+            if($this->MotherComboboxAutoLoadMode==ComboBox::$AUTOLOADMODE_ONPAGE)
+            {
+                $theMotherCombobox="\$(\"[name=" . $this->MotherComboboxName . "]\")";
+                $html .= $theMotherCombobox . ".change(function() {\n";
+                $html.="\tvar gid=$theMotherCombobox" . ".val();\n";
+                $html .= "\tloadSelectItems('". $this->getName() . "',$varName2" . "[gid]);\n";
 //            $html .= "\talert( \"Handler for .change() called.\" );\n";
-            $html .= "});";
+                $html .= "});";
+            }
         }
         $html.="</script>";
         return $html;
