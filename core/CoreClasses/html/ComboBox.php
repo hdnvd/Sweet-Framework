@@ -21,6 +21,40 @@ class ComboBox extends baseHTMLElement {
 	private $MotherComboboxName;
 	private $MotherComboboxAutoLoadMode;
     private $DataLoadJSONURL;
+    private $DefaultOption;
+    private $DefaultOptionValue;
+
+    /**
+     * @return mixed
+     */
+    public function getDefaultOption()
+    {
+        return $this->DefaultOption;
+    }
+
+    /**
+     * @param mixed $DefaultOption
+     */
+    public function setDefaultOption($DefaultOption)
+    {
+        $this->DefaultOption = $DefaultOption;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDefaultOptionValue()
+    {
+        return $this->DefaultOptionValue;
+    }
+
+    /**
+     * @param mixed $DefaultOptionValue
+     */
+    public function setDefaultOptionValue($DefaultOptionValue)
+    {
+        $this->DefaultOptionValue = $DefaultOptionValue;
+    }
 
     /**
      * @return mixed
@@ -191,12 +225,13 @@ class ComboBox extends baseHTMLElement {
             $funcName="load" . $this->getName() ;
             $html.="function " . $funcName ."() {\n";
             $html.="\tvar gid=$theMotherCombobox" . ".val();\n";
+
             if($this->MotherComboboxAutoLoadMode==ComboBox::$AUTOLOADMODE_ONPAGE) {
                 $html .= "\tloadSelectItems('" . $this->getName() . "',$varName2" . "[gid]);\n";
             }
             else
             {
-                $html .= "\tLoadJSON2Select('" . $this->getName() . "','" . $this->DataLoadJSONURL  . $this->MotherComboboxName . "_id='+ gid);\n";
+                $html .= "\tLoadJSON2Select('" . $this->getName() . "','" . $this->DataLoadJSONURL  . $this->MotherComboboxName . "_id='+ gid,'" . $this->DefaultOption . "','" . $this->DefaultOptionValue . "');\n";
             }
             $html .= "}\n";
 //            $html.=$funcName . "();\n";
