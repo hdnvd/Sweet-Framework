@@ -196,3 +196,11 @@
  * 2-Added Net.WebCLient
  * 2-Added GREcaptcha Settings to Config.php
  */
+
+
+/*
+ * Date:2017/08/24
+ * New Version:1.023
+ * Changes Made:
+ * 1-Added Ajax Support to ComboBox
+ */
