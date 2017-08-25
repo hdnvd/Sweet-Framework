@@ -34,10 +34,12 @@ class Lable extends baseHTMLElement {
 		
 		$html="<span ". $this->getAttributesDefinition() . ">" ;
 		if($this->htmlcontent)
-		$html.= htmlspecialchars($this->content) ;
+        {
+            $html.= htmlspecialchars($this->content);
+            $html=str_replace("\n","</br>",$html);
+        }
 		else
 		$html.= $this->content;
-		$html=str_replace("\n","</br>",$html);
 		 $html.= "</span>";
 		return $html;
 	}
