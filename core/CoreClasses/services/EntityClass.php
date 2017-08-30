@@ -130,17 +130,15 @@ class EntityClass  extends ModuleClass{
 		$Database=$this->Database;
 		$Query=$Database->Select($FieldstoSelect)->From($this->TableName);
 		$NotNullIndex=0;
+
+        $Query=$Query->Where()->Smaller("deletetime", "0");
 		if(!is_null($FieldValues) && count($FieldValues)>0)
 		{
 			for($i=0;$i<count($FieldValues);$i++)
 			{
 				if(!is_null($FieldValues[$i]['value']))
 				{
-					
-					if($NotNullIndex==0)
-						$Query=$Query->Where();
-					else
-						$Query=$Query->AndLogic();
+					$Query=$Query->AndLogic();
 					if($Logics===null || count($Logics)==0)
 						$Query=$Query->Equal($FieldValues[$i]['name'], $FieldValues[$i]['value']);
 					else 
@@ -151,6 +149,7 @@ class EntityClass  extends ModuleClass{
 					$NotNullIndex++;
 				}
 			}
+
 		}
 //  		echo $Query->getQueryString();
 		return $Query->ExecuteAssociated();
@@ -227,7 +226,7 @@ class EntityClass  extends ModuleClass{
             for($i=1;$i<count($fields);$i++)
                 $resFields.="," . $fields[$i];
         }
-        $this->SelectQuery=$this->getDatabase()->Select(array($resFields))->From($this->getTableName())->Where()->Equal("1","1");
+        $this->SelectQuery=$this->getDatabase()->Select(array($resFields))->From($this->getTableName())->Where()->Smaller("deletetime", "0");
         $this->fillSelectParams($QueryObject);
 //        echo $this->SelectQuery->getQueryString() . "\n";
 //        die();
@@ -263,7 +262,7 @@ class EntityClass  extends ModuleClass{
     public function FindAllCount(QueryLogic $QueryObject)
     {
         $resFields="count(*) c";
-        $this->SelectQuery=$this->getDatabase()->Select(array($resFields))->From($this->getTableName())->Where()->Equal("1","1");
+        $this->SelectQuery=$this->getDatabase()->Select(array($resFields))->From($this->getTableName())->Where()->Smaller("deletetime", "0");
         $this->fillSelectParams($QueryObject);
 //        echo $this->SelectQuery->getQueryString();
         $results= $this->SelectQuery->ExecuteAssociated();
