@@ -21,8 +21,27 @@ class dbaccess
         
 	    $this->setAutoClose(false);
 	    $this->dbHandler->beginTransaction();
-	
 	}
+	public function getTableFields($tableName)
+	{
+        global $setting_tablePrefix;
+        $this->connectToDatabase();
+        $statement=$this->ExecuteQuery("SHOW COLUMNS FROM `" . $setting_tablePrefix . $tableName .  "`");
+        $object=null;
+        for($i=0;$obj=$statement->fetch(\PDO::FETCH_ASSOC);$i++)
+            $object[$i]=$obj;
+        if($this->getAutoClose())
+            $this->close_connection();
+		return $object;
+	}
+    public function getIsFieldExists($tableName,$fieldName)
+    {
+        global $setting_tablePrefix;
+        $this->connectToDatabase();
+        $statement=$this->ExecuteQuery("SHOW COLUMNS FROM `" . $setting_tablePrefix . $tableName .  "` LIKE '".$fieldName."'; ");
+        $object=$statement->fetch(\PDO::FETCH_ASSOC);
+        return $object!=false;
+    }
 	public function commit()
 	{
 	    $this->dbHandler->commit();
