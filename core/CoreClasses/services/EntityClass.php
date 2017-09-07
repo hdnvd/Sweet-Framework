@@ -130,7 +130,7 @@ class EntityClass  extends ModuleClass{
 		$Database=$this->Database;
 		$Query=$Database->Select($FieldstoSelect)->From($this->TableName);
 		$NotNullIndex=0;
-        $Query=$Query->Where()->Smaller("deletetime", "0");
+        $Query=$Query->Where()->Equal("1", "1");
 		if(!is_null($FieldValues) && count($FieldValues)>0)
 		{
 			for($i=0;$i<count($FieldValues);$i++)
