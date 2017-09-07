@@ -145,7 +145,7 @@ class baseLogicalQuery extends baseQuery
 			$Str= $field;
 		return $Str;
 	}
-	protected function getValueString($tablePrefix,$field)
+	protected function getValueString($tablePrefix,$field,$autoQuote=true)
 	{
 		if(is_object($field))
 		{

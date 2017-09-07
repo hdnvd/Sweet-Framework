@@ -146,7 +146,7 @@ class selectQuery extends baseLogicalQuery{
 	public function AddOrderBy($Field,$IsDescending)
 	{
         global $setting_tablePrefix;
-		array_push($this->orderByFields,$this->getValueString($setting_tablePrefix,$Field));
+		array_push($this->orderByFields,$this->getValueString($setting_tablePrefix,$Field,false));
 		array_push($this->IsOrderedDescendings,$IsDescending);
 		return $this;
 	}
@@ -157,7 +157,7 @@ class selectQuery extends baseLogicalQuery{
 	public function AddGroupBy($Field)
 	{
         global $setting_tablePrefix;
-        array_push($this->GroupBys,$this->getValueString($setting_tablePrefix,$Field));
+        array_push($this->GroupBys,$this->getValueString($setting_tablePrefix,$Field,false));
 		return $this;
 	}
 	public function Execute()
