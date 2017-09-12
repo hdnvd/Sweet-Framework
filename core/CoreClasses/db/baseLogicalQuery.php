@@ -145,7 +145,7 @@ class baseLogicalQuery extends baseQuery
 			$Str= $field;
 		return $Str;
 	}
-	protected function getValueString($tablePrefix,$field,$autoQuote=true)
+	protected function getValueString($tablePrefix,$field,$AddQuotationMark=true)
 	{
 		if(is_object($field))
 		{
@@ -156,7 +156,18 @@ class baseLogicalQuery extends baseQuery
 			$Str=$tmpField;
 		}
 		else
-			$Str= $this->dbObject->quote($field);
+        {
+            if($AddQuotationMark)
+                $Str= $this->dbObject->quote($field);
+            else
+            {
+                $Str=$this->dbObject->quote( $field );
+                $Str=substr($Str,1,-1);
+            }
+
+        }
+
+
 		return $Str;
 	}
 }
