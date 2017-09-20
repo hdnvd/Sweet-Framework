@@ -210,6 +210,8 @@ class EntityClass  extends ModuleClass{
     function __call($func, $params){
         if(substr($func,0,3)=="get" && $func!="getID" && $func!="getDatabase" && $func!="getTableName" && $func!="getField" && $func!="getSelect" && $func!="getJsFilesDirectory" && $func!="getModuleDirectory" && $func!="getPHPFilesDirectory" && $func!="getTextsDirectory")
             return $this->getField(strtolower(substr($func,3)));
+//        if(substr($func,0,3)=="set" && $func!="setID" && $func!="setDatabase" && $func!="setTableName" && $func!="setField" && $func!="setSelect" && $func!="setJsFilesDirectory" && $func!="setModuleDirectory" && $func!="setPHPFilesDirectory" && $func!="setTextsDirectory")
+//            return $this->setField(strtolower(substr($func,3)),$params[0]);
     }
     /**
      * @param QueryLogic $QueryObject
@@ -294,6 +296,7 @@ class EntityClass  extends ModuleClass{
         $this->InsertQuery->Set("deletetime", "-1");
         $this->InsertQuery->Execute();
         $this->id=$this->InsertQuery->getInsertedId();
+//        echo $this->getInsertQuery()->getQueryString();
         return $this->id;
     }
     private function UpdateSave()
