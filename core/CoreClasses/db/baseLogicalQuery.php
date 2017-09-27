@@ -136,10 +136,20 @@ class baseLogicalQuery extends baseQuery
 	{
 		if(is_object($field))
 		{
-			$tmpField=$field->getField();
-			if($field->getAddTablePrefix())
-				$tmpField=$tablePrefix . $tmpField;
-			$Str=$tmpField;
+			if(get_class($field)=="core\CoreClasses\db\DBValue")
+            {
+
+                $tmpField=$field->getField();
+                $Str=$this->dbObject->quote($tmpField);
+            }
+            else
+            {
+
+                $tmpField=$field->getField();
+                if($field->getAddTablePrefix())
+                    $tmpField=$tablePrefix . $tmpField;
+                $Str=$tmpField;
+            }
 		}
 		else
 			$Str= $field;

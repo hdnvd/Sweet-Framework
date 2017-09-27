@@ -5,6 +5,8 @@
 */
 namespace core\CoreClasses\services;
 	use core\CoreClasses\db\dbaccess;
+    use core\CoreClasses\db\DBField;
+    use core\CoreClasses\db\DBValue;
     use core\CoreClasses\db\FieldCondition;
     use core\CoreClasses\db\LogicalOperator;
     use core\CoreClasses\db\QueryLogic;
@@ -66,7 +68,8 @@ namespace core\CoreClasses\services;
             $URL=$_SERVER['REQUEST_URI'];
             $Ent=new sfman_pageinfoEntity($dbAccessor);
             $q=new QueryLogic();
-            $q->addCondition(new FieldCondition(sfman_pageinfoEntity::$INTERNALURL,$URL,LogicalOperator::Equal));
+            $q->addCondition(new FieldCondition(new DBValue( $URL ),new DBField("CONCAT('%', " . sfman_pageinfoEntity::$INTERNALURL . ", '%')",false),LogicalOperator::LIKE));
+            $q->addOrderBy("LENGTH(internalurl)",true);
             $Ent=$Ent->FindOne($q);
             return $Ent;
         }
