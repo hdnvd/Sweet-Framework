@@ -4,18 +4,24 @@
 *@Last Update:2014/5/06
 */
 namespace core\CoreClasses\services;
-	use core\loader;
-	/*
-	* @Author:Hadi AmirNahavandi
-	* @Creation Date:1393/02/13
-	* @Last Update:1395/10/19
-	* @Description:Parent Of All FormCodes
-	*/
+	use core\CoreClasses\db\dbaccess;
+    use core\CoreClasses\db\FieldCondition;
+    use core\CoreClasses\db\LogicalOperator;
+    use core\CoreClasses\db\QueryLogic;
+    use core\loader;
+    use Modules\sfman\Entity\sfman_pageinfoEntity;
+
+    /*
+    * @Author:Hadi AmirNahavandi
+    * @Creation Date:1393/02/13
+    * @Last Update:1396/07/06
+    * @Description:Parent Of All FormCodes
+    */
 	abstract class FormCode extends ModuleClass
 	{
 		private $loadType,$ThemePage,$Title;
 		private $Keywords,$Description,$CanonicalURL;
-
+        private $CustomPageInfo=null;
 		public function setLoadType($type)
 		{
 			if($type=="ajax")
@@ -42,18 +48,34 @@ namespace core\CoreClasses\services;
 		
 		public function __construct($namespace)
 		{
-			$this->setThemePage("page.php");
-			$this->Keywords=array();
-			$this->Title=null;
-			$this->CanonicalURL=null;
-			$this->Description=null;
+		    $this->CustomPageInfo=$this->getCustomPageInfo();
+		    $this->setThemePage("page.php");
+            $this->Keywords="";
+            $this->Title=null;
+            $this->CanonicalURL=null;
+            $this->Description=null;
             $this->setModuleName($namespace);
 		}
 
-	
+        /**
+         * @return EntityClass|sfman_pageinfoEntity
+         */
+        private function getCustomPageInfo()
+        {
+            $dbAccessor=new dbaccess();
+            $URL=$_SERVER['REQUEST_URI'];
+            $Ent=new sfman_pageinfoEntity($dbAccessor);
+            $q=new QueryLogic();
+            $q->addCondition(new FieldCondition(sfman_pageinfoEntity::$INTERNALURL,$URL,LogicalOperator::Equal));
+            $Ent=$Ent->FindOne($q);
+            return $Ent;
+        }
 		public function getThemePage($Action="load")
 		{
-		    return $this->ThemePage;
+		    if($this->CustomPageInfo==null)
+		        return $this->ThemePage;
+		    else
+		        return $this->CustomPageInfo->getThemepage();
 		}
 
 		protected function setThemePage($ThemePage)
@@ -63,7 +85,11 @@ namespace core\CoreClasses\services;
 
 		public function getTitle()
 		{
-		    return $this->Title;
+            if($this->CustomPageInfo==null)
+                return $this->Title;
+            else
+                return $this->CustomPageInfo->getTitle();
+
 		}
 
 		protected function setTitle($Title)
@@ -73,17 +99,25 @@ namespace core\CoreClasses\services;
 
 		public function getKeywords()
 		{
-		    return $this->Keywords;
+            if($this->CustomPageInfo==null)
+                return $this->Keywords;
+            else
+                return $this->CustomPageInfo->getKeywords();
 		}
-
+/*
 		public function addKeyword($Keyword)
 		{
 		    array_push($this->Keywords, $Keyword);
 		}
-
+*/
 		public function getDescription()
 		{
-		    return $this->Description;
+
+            if($this->CustomPageInfo==null)
+                return $this->Description;
+            else
+                return $this->CustomPageInfo->getDescription();
+
 		}
 
 		public function setDescription($Description)
@@ -93,7 +127,11 @@ namespace core\CoreClasses\services;
 
 		public function getCanonicalURL()
 		{
-		    return $this->CanonicalURL;
+
+            if($this->CustomPageInfo==null)
+                return $this->CanonicalURL;
+            else
+                return $this->CustomPageInfo->getCanonicalurl();
 		}
 
 		public function setCanonicalURL($CanonicalURL)
