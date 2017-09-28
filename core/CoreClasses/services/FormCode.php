@@ -68,9 +68,17 @@ namespace core\CoreClasses\services;
             $URL=$_SERVER['REQUEST_URI'];
             $Ent=new sfman_pageinfoEntity($dbAccessor);
             $q=new QueryLogic();
-            $q->addCondition(new FieldCondition(new DBValue( $URL ),new DBField("CONCAT('%', " . sfman_pageinfoEntity::$INTERNALURL . ", '%')",false),LogicalOperator::LIKE));
-            $q->addOrderBy("LENGTH(internalurl)",true);
+            $q->addCondition(new FieldCondition(sfman_pageinfoEntity::$INTERNALURL, $URL,LogicalOperator::Equal));
             $Ent=$Ent->FindOne($q);
+            if($Ent==null)
+            {
+                $Ent=new sfman_pageinfoEntity($dbAccessor);
+                $q=new QueryLogic();
+                $q->addCondition(new FieldCondition("LENGTH(".sfman_pageinfoEntity::$SENTENCEINURL.")","4",LogicalOperator::Bigger));
+                $q->addCondition(new FieldCondition(new DBValue( $URL ),new DBField("CONCAT('%', " . sfman_pageinfoEntity::$SENTENCEINURL . ", '%')",false),LogicalOperator::LIKE));
+                $q->addOrderBy("LENGTH(".sfman_pageinfoEntity::$SENTENCEINURL.")",true);
+                $Ent=$Ent->FindOne($q);
+            }
             return $Ent;
         }
 		public function getThemePage($Action="load")
