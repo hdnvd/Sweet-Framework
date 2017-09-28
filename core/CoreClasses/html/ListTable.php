@@ -13,6 +13,15 @@ class ListTable extends baseHTMLElement {
 	
 	
 	private $ColumnsCount,$elements,$elementColspans,$elementStyles,$elementClasses,$elementIDs;
+	private $HeaderRowCount;
+
+    /**
+     * @param int $HeaderRowCount
+     */
+    public function setHeaderRowCount($HeaderRowCount)
+    {
+        $this->HeaderRowCount = $HeaderRowCount;
+    }
 	/**
 	 * 
 	 * @param int $ColumnsCount
@@ -25,6 +34,7 @@ class ListTable extends baseHTMLElement {
 		$this->elementStyles=array();
 		$this->elementClasses=array();
 		$this->elementIDs=array();
+		$this->HeaderRowCount=0;
 	}
 	function setElementsGroup(elementGroup $ElementsGroup)
 	{
@@ -66,15 +76,20 @@ class ListTable extends baseHTMLElement {
 	 *
 	 */
 	public function getHTML() {
-		
-	    
+
 		$elementsCount=count($this->elements);
 		$code="\n<table ".$this->getAttributesDefinition().">";
 		$collumnNumber=0;
+		$RowNumber=0;
 		for($i=0;$i<$elementsCount;$i++)
 		{
 		    if($collumnNumber==0)
 			     $code.="\n\t<tr>";
+		    if($RowNumber<$this->HeaderRowCount)
+		        $itemTag="th";
+		    else
+                $itemTag="td";
+
 			$tmpcolspan="";
 			$tmpID="";
 			$tmpClass="";
@@ -88,11 +103,12 @@ class ListTable extends baseHTMLElement {
 			if(!is_null($this->elementStyles) && key_exists($i, $this->elementStyles) && !is_null($this->elementStyles[$i]))
 				$tmpStyle=" style=\"" . $this->elementStyles[$i] ."\"";
 				
-			$code.="\n\t\t<td $tmpcolspan $tmpStyle $tmpClass $tmpID>" . $this->elements[$i] . "</td>";
+			$code.="\n\t\t<" . $itemTag." $tmpcolspan $tmpStyle $tmpClass $tmpID>" . $this->elements[$i] . "</" . $itemTag . ">";
 			$collumnNumber+=$this->elementColspans[$i];
 		    if($collumnNumber>=$this->ColumnsCount)
 		    {
 		         $collumnNumber=0;
+                $RowNumber++;
 			     $code.="\n\t</tr>";
 		    }
 		}
