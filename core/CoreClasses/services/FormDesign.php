@@ -141,7 +141,7 @@ namespace core\CoreClasses\services;
         {
             $this->FieldCaptions[$FieldName]=$Caption;
         }
-        protected function __construct()
+        public function __construct()
         {
             $this->FieldCaptions=array();
         }
