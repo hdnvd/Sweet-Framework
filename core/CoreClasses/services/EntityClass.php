@@ -15,6 +15,32 @@ class EntityClass  extends ModuleClass{
     public static $ID='id';
     private $id;
     private $Fields;
+    private $FieldInfos;
+
+
+    /**
+     * @return FieldInfo
+     */
+    public function getFieldInfo($FieldName)
+    {
+        if(key_exists($FieldName,$this->FieldInfos))
+            return $this->FieldInfos[$FieldName];
+        else
+        {
+            $fInf=new FieldInfo();
+            $fInf->setTitle($FieldName);
+            return $fInf;
+        }
+    }
+
+    /**
+     * @param FieldInfo $FieldInfo
+     * @param string $FieldName
+     */
+    protected function setFieldInfo($FieldName,FieldInfo $FieldInfo)
+    {
+        $this->FieldInfos[$FieldName] = $FieldInfo;
+    }
     /**
      * @var dbquery
      */
