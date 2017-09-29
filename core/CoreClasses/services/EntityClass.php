@@ -16,6 +16,23 @@ class EntityClass  extends ModuleClass{
     private $id;
     private $Fields;
     private $FieldInfos;
+    private $TableTitle;
+
+    /**
+     * @return mixed
+     */
+    public function getTableTitle()
+    {
+        return $this->TableTitle;
+    }
+
+    /**
+     * @param mixed $TableTitle
+     */
+    protected function setTableTitle($TableTitle)
+    {
+        $this->TableTitle = $TableTitle;
+    }
 
 
     /**
@@ -148,6 +165,7 @@ class EntityClass  extends ModuleClass{
 	{
 		$this->Database=$Database;
 		$this->TableName=$TableName;
+		$this->setTableTitle($TableName);
         $this->id=-1;
         $this->Fields=array('deletetime'=>-1);
 	}
