@@ -6,6 +6,7 @@
 namespace core\CoreClasses\html;
 
 class TextBox extends HTMLInput {
+
 	function __construct($Name,$Text=null,$Visible=true,$ID=null,$Class="textbox",$ReadOnly=false) 
 	{
 	    if(isset($_POST[$Name]))
@@ -16,6 +17,9 @@ class TextBox extends HTMLInput {
 		$this->setVisible($Visible);
 		$this->setType("text");
 	}
+
+
+
 }
 
 ?>

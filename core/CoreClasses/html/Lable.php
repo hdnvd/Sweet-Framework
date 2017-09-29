@@ -10,6 +10,15 @@ namespace core\CoreClasses\html;
 class Lable extends baseHTMLElement {
 	private $content,$id,$class;
 	private $htmlcontent;
+	private $TagName="span";
+
+    /**
+     * @param string $TagName
+     */
+    protected function setTagName($TagName)
+    {
+        $this->TagName = $TagName;
+    }
 	/**
 	 */
 	function __construct($Content,$ID="Lable",$Class="Lable") {
@@ -17,6 +26,7 @@ class Lable extends baseHTMLElement {
 		$this->setId($ID);
 		$this->setClass($Class);
 		$this->setHtmlContent(true);
+		$this->TagName="span";
 		
 	}
 	public function setHtmlContent($state)
@@ -32,7 +42,7 @@ class Lable extends baseHTMLElement {
 	 */
 	public function getHTML() {
 		
-		$html="<span ". $this->getAttributesDefinition() . ">" ;
+		$html="<". $this->TagName . $this->getAttributesDefinition() . ">" ;
 		if($this->htmlcontent)
         {
             $html.= htmlspecialchars($this->content);
@@ -40,7 +50,7 @@ class Lable extends baseHTMLElement {
         }
 		else
 		$html.= $this->content;
-		 $html.= "</span>";
+		 $html.= "</". $this->TagName . ">";
 		return $html;
 	}
 

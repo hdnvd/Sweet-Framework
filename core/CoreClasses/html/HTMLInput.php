@@ -1,6 +1,8 @@
 <?php
 
 namespace core\CoreClasses\html;
+use core\CoreClasses\services\FieldInfo;
+use core\CoreClasses\services\FieldType;
 
 /**
  *
@@ -9,7 +11,54 @@ namespace core\CoreClasses\html;
  */
 class HTMLInput extends baseHTMLElement{
 private $class,$name,$value,$id,$visible,$readonly,$type,$additonalAttr;
-private $MaxLength,$Type;
+private $Type;
+private $ValidationPattern;
+private $MinLength;
+    private $Required;
+    /**
+     * @param string $ValidationPattern
+     */
+    public function setValidationPattern($ValidationPattern)
+    {
+        $this->ValidationPattern = $ValidationPattern;
+    }
+    /**
+     * @param FieldInfo $Inf
+     */
+    public function setFieldInfo(FieldInfo $Inf)
+    {
+        $this->setMaxLength($Inf->getMaxLength());
+        $this->setMinLength($Inf->getMinLength());
+        $this->setRequired($Inf->getRequired());
+        $tp=$Inf->getType();
+        switch($tp)
+        {
+            case FieldType::$TEXT:
+                $this->setType("text");
+                break;
+            case FieldType::$EMAIL:
+                $this->setType("email");
+                $this->setValidationPattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$');
+                break;
+            case FieldType::$MELLICODE:
+            case FieldType::$TEL:
+            case FieldType::$INTEGER:
+                $this->setType("text");
+                $this->setValidationPattern('[0-9]');
+                break;
+            case FieldType::$MOBILE:
+                $this->setType("text");
+                $this->setValidationPattern('0[0-9]');
+                break;
+            case FieldType::$URL:
+                $this->setType("url");
+                break;
+            default:
+                $this->setType("text");
+
+        }
+
+    }
 	function __construct($Name,$Value="",$ID=null,$Class="input",$ReadOnly=false) 
 	{
 		$this->setName($Name);
@@ -22,7 +71,7 @@ private $MaxLength,$Type;
 		$this->setReadonly($ReadOnly);
 		$this->setVisible(true);
 	}
-	protected function setType($Type)
+	public function setType($Type)
 	{
 		$this->Type=$Type;
 		if($this->visible)
@@ -48,12 +97,21 @@ private $MaxLength,$Type;
 		}
 		return $html;
 	}
+	public function getFullValidationPattern()
+    {
+        $minLen=$this->getMinLength();
+        $maxLen=$this->getMaxLength();
+        $Chars=$this->ValidationPattern;
+        if($Chars=="")
+            $Chars=".";
+        return "pattern='" . $Chars . '{' . $minLen . ',' . $maxLen . "}" . "'";
+    }
 	public function getHTML() 
 	{
 		$html="<input ";
 		if($this->readonly)
 			$html.="readonly ";
-		$html.=$this->getAttributesDefinition() . $this->getAdditonalAttrHTML() . " />";
+		$html.=$this->getAttributesDefinition() . $this->getAdditonalAttrHTML() . " " . $this->getFullValidationPattern() ." />";
 		return $html;
 	}
 
@@ -96,13 +154,31 @@ private $MaxLength,$Type;
 
 	public function getMaxLength()
 	{
-	    $this->getAttribute("maxlength");
+	    return $this->getAttribute("maxlength");
 	}
 
 	public function setMaxLength($MaxLength)
 	{
 	    $this->SetAttribute("maxlength", $MaxLength);
 	}
+    public function getMinLength()
+    {
+        return $this->MinLength;
+    }
+
+    public function setMinLength($MinLength)
+    {
+        $this->MinLength=$MinLength;
+    }
+    /**
+     * @param mixed $Required
+     */
+    public function setRequired($Required)
+    {
+        $this->Required = $Required;
+        if($this->Required)
+            $this->SetAttribute("required","required");
+    }
 }
 
 ?>
