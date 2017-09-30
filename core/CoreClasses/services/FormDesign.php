@@ -7,6 +7,11 @@ namespace core\CoreClasses\services;
 	use core\CoreClasses\html\Div;
     use core\CoreClasses\html\FormLabel;
     use core\CoreClasses\html\Lable;
+    use core\CoreClasses\html\link;
+    use core\CoreClasses\html\UList;
+    use core\CoreClasses\html\UListElement;
+    use Modules\common\PublicClasses\AppRooter;
+    use Modules\common\PublicClasses\UrlParameter;
 
     abstract class FormDesign extends ModuleClass
 	{
@@ -135,7 +140,52 @@ namespace core\CoreClasses\services;
             if(key_exists($FieldName,$this->FieldCaptions))
                 return $this->FieldCaptions[$FieldName];
             else
+            {
+                if($FieldName=="sortby")
+                    return "مرتب سازی بر اساس";
+                if($FieldName=="isdesc")
+                    return "نوع مرتب سازی";
                 return $FieldName;
+            }
+        }
+        protected function getPaginationPart($PageCount,$ModuleName,$PageName)
+        {
+            $Pagination=new UList();
+            $Pagination->setClass("pagination");
+            for($i=1;$i<=$PageCount;$i++)
+            {
+                $RTR=null;
+                if(isset($_GET['action']) && $_GET['action']=="search_Click")
+                    $RTR=new AppRooter($ModuleName,$PageName);
+                else
+                {
+                    $RTR=new AppRooter($ModuleName,$PageName);
+                }
+                $RTR->addParameter(new UrlParameter("pn",$i));
+                $RTR->setAppendToCurrentParams(false);
+                $lbl=new Lable($i);
+                $lnk=new link($RTR->getAbsoluteURL(),$lbl);
+                $Pagination->addElement(new UListElement($lnk));
+            }
+            return $Pagination;
+        }
+
+        protected function getPageTitlePart($Title)
+        {
+            $PageTitlePart=new Div();
+            $PageTitlePart->setClass("sweet_pagetitlepart");
+            $PageTitlePart->addElement(new Lable($Title));
+            return $PageTitlePart;
+        }
+        protected function getMessagePart()
+        {
+            $MessagePart=new Div();
+            if($this->getMessageType()==MessageType::$ERROR)
+                $MessagePart->setClass("sweet_messagepart alert alert-danger");
+            else
+                $MessagePart->setClass("sweet_messagepart alert alert-success");
+            $MessagePart->addElement(new Lable($this->getMessage()));
+            return $MessagePart;
         }
         protected function setFieldCaption($FieldName,$Caption)
         {
