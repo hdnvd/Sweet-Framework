@@ -27,7 +27,16 @@ class FieldInfo
         $this->MaxLength=10000000;
         $this->Type=FieldType::$TEXT;
     }
-
+    public function getCopy()
+    {
+        $fInf2=new FieldInfo();
+        $fInf2->setTitle($this->getTitle());
+        $fInf2->setMinLength($this->getMinLength());
+        $fInf2->setMaxLength($this->getMaxLength());
+        $fInf2->setRequired($this->getRequired());
+        $fInf2->setType($this->getType());
+        return $fInf2;
+    }
     /**
      * @return mixed
      */
