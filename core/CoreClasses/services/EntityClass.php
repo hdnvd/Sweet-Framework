@@ -17,6 +17,29 @@ class EntityClass  extends ModuleClass{
     private $Fields;
     private $FieldInfos;
     private $TableTitle;
+    private $TitleFieldName="id";
+
+    /**
+     * @return string
+     */
+    public function getTitleFieldName()
+    {
+        return $this->TitleFieldName;
+    }
+    /**
+     * @return string
+     */
+    public function getTitleField()
+    {
+        return $this->getField($this->getTitleFieldName());
+    }
+    /**
+     * @param string $TitleFieldName
+     */
+    public function setTitleFieldName($TitleFieldName)
+    {
+        $this->TitleFieldName = $TitleFieldName;
+    }
 
     /**
      * @return mixed
@@ -357,7 +380,9 @@ class EntityClass  extends ModuleClass{
         $FieldNames=array_keys($this->Fields);
         for($i=0;$i<count($FieldNames);$i++)
             $this->InsertQuery->Set($FieldNames[$i],$this->Fields[$FieldNames[$i]]);
+//        print_r($this->Fields);
         $this->InsertQuery->Set("deletetime", "-1");
+//        echo $this->getInsertQuery()->getQueryString();
         $this->InsertQuery->Execute();
         $this->id=$this->InsertQuery->getInsertedId();
 //        echo $this->getInsertQuery()->getQueryString();
