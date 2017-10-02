@@ -23,7 +23,7 @@ class Button extends baseHTMLElement {
 	}
 	public function getHTML()
 	{
-		
+
 		if(!$this->isSubmit)
 			$this->setType("button");
 		else
