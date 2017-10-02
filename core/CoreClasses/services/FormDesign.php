@@ -125,6 +125,21 @@ namespace core\CoreClasses\services;
             $Group->addElement($TitleField);
             return $Group;
         }
+        protected function getInfoRowCode($Field,$Title)
+        {
+            $Group=new Div();
+            $Group->setClass('row');
+            $TitleDiv=new Div();
+            $TitleDiv->setClass('info-label col-sm-2');
+            $lblTitle=new FormLabel($Title);
+            $TitleDiv->addElement($lblTitle);
+            $Group->addElement($TitleDiv);
+            $TitleField=new Div();
+            $TitleField->setClass('info-data col-sm-10');
+            $TitleField->addElement($Field);
+            $Group->addElement($TitleField);
+            return $Group;
+        }
         protected function getSingleFieldRowCode($Field)
         {
             $Group=new Div();
