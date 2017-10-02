@@ -40,13 +40,33 @@ class EntityClass  extends ModuleClass{
      */
     public function getFieldInfo($FieldName)
     {
+
         if(key_exists($FieldName,$this->FieldInfos))
             return $this->FieldInfos[$FieldName];
         else
         {
-            $fInf=new FieldInfo();
-            $fInf->setTitle($FieldName);
-            return $fInf;
+            if((substr($FieldName,strlen($FieldName)-3,3)=="_to"))
+            {
+                $FieldName2=substr($FieldName,0,strlen($FieldName)-3);
+                $fInf=$this->getFieldInfo($FieldName2);
+                $fInf2=$fInf->getCopy();
+                $fInf2->setTitle($fInf2->getTitle() . " تا");
+                return $fInf2;
+            }
+            elseif((substr($FieldName,strlen($FieldName)-5,5)=="_from"))
+            {
+                $FieldName2=substr($FieldName,0,strlen($FieldName)-5);
+                $fInf=$this->getFieldInfo($FieldName2);
+                $fInf2=$fInf->getCopy();
+                $fInf2->setTitle($fInf2->getTitle() . " از");
+                return $fInf2;
+            }
+            else
+            {
+                $fInf=new FieldInfo();
+                $fInf->setTitle($FieldName);
+                return $fInf;
+            }
         }
     }
 
@@ -137,7 +157,7 @@ class EntityClass  extends ModuleClass{
      */
     public function setId($id)
     {
-        $this->SelectQuery=$this->getDatabase()->Select(array("*"))->From($this->getTableName())->Where()->Equal("id",$id)->AndLogic()->Smaller("deletetime", "0");
+        $this->SelectQuery=$this->getDatabase()->Select(array("*"))->From($this->getTableName())->Where()->Equal("id",$id)->AndLogic()->Smaller("deletetime", "1");
         $this->SelectQuery=$this->SelectQuery->setLimit("0,1");
 //        echo $this->SelectQuery->getQueryString();
         $result=$this->SelectQuery->ExecuteAssociated();
@@ -215,7 +235,7 @@ class EntityClass  extends ModuleClass{
     {
         $this->UpdateQuery=$this->getDatabase()->Update($this->getTableName())
             ->Set("deletetime", time())
-            ->Where()->Smaller("deletetime", "0")->AndLogic()->Equal("id",$this->id);
+            ->Where()->Smaller("deletetime", "1")->AndLogic()->Equal("id",$this->id);
         //echo $this->UpdateQuery->getQueryString();
         //die();
         $this->UpdateQuery->Execute();
@@ -241,7 +261,7 @@ class EntityClass  extends ModuleClass{
         for($i=0;$OrderByFields!==null && $i<count($OrderByFields);$i++)
             $this->SelectQuery=$this->SelectQuery->AddOrderBy($OrderByFields[$i], $IsDescendings[$i]);
             $this->SelectQuery=$this->SelectQuery->setLimit("0,1");
-        $this->SelectQuery=$this->SelectQuery->AndLogic()->Smaller("deletetime", "0");
+        $this->SelectQuery=$this->SelectQuery->AndLogic()->Smaller("deletetime", "1");
         //echo $this->SelectQuery->getQueryString();
         //die();
         $result=$this->SelectQuery->ExecuteAssociated();
@@ -271,7 +291,7 @@ class EntityClass  extends ModuleClass{
             for($i=1;$i<count($fields);$i++)
                 $resFields.="," . $fields[$i];
         }
-        $this->SelectQuery=$this->getDatabase()->Select(array($resFields))->From($this->getTableName())->Where()->Smaller("deletetime", "0");
+        $this->SelectQuery=$this->getDatabase()->Select(array($resFields))->From($this->getTableName())->Where()->Smaller("deletetime", "1");
         $this->fillSelectParams($QueryObject);
 //        echo $this->SelectQuery->getQueryString() . "\n";
 //        die();
@@ -307,7 +327,7 @@ class EntityClass  extends ModuleClass{
     public function FindAllCount(QueryLogic $QueryObject)
     {
         $resFields="count(*) c";
-        $this->SelectQuery=$this->getDatabase()->Select(array($resFields))->From($this->getTableName())->Where()->Smaller("deletetime", "0");
+        $this->SelectQuery=$this->getDatabase()->Select(array($resFields))->From($this->getTableName())->Where()->Smaller("deletetime", "1");
         $this->fillSelectParams($QueryObject);
 //        echo $this->SelectQuery->getQueryString();
         $results= $this->SelectQuery->ExecuteAssociated();
@@ -329,7 +349,7 @@ class EntityClass  extends ModuleClass{
         $Limit=$QueryObject->getLimit();
         if($Limit!==null)
             $this->SelectQuery=$this->SelectQuery->setLimit($Limit);
-        $this->SelectQuery=$this->SelectQuery->AndLogic()->Smaller(new DBField($this->getTableName() . ".deletetime",true), "0");
+        $this->SelectQuery=$this->SelectQuery->AndLogic()->Smaller(new DBField($this->getTableName() . ".deletetime",true), "1");
     }
     private function InsertSave()
     {
