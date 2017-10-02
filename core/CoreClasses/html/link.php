@@ -5,20 +5,35 @@
 */
 namespace core\CoreClasses\html;
 
+use core\deviceinterface;
+
 class link extends baseHTMLElement{
 	private $content,$showMode;
-	public function __construct($Link,$content,$id='link',$class='link',$showMode=\core\deviceinterface::WEBBROWSER)
+	private $glyphiconClass;
+
+    /**
+     * @param mixed $glyphiconClass
+     */
+    public function setGlyphiconClass($glyphiconClass)
+    {
+        $this->glyphiconClass = $glyphiconClass;
+    }
+	public function __construct($Link,$content,$id='link',$class='link',$showMode=deviceinterface::WEBBROWSER)
 	{
 		$this->SetLink($Link);
 		$this->content=$content;
 		$this->showMode=$showMode;
 		$this->setClass($class);
 		$this->setId($id);
+		$this->setGlyphiconClass(null);
 		
 	}
 	public function getHTML()
 	{
-		$html="<a".$this->getAttributesDefinition().">" . $this->content . "</a>";
+        $glyphicon="";
+	    if($this->glyphiconClass!=null)
+            $glyphicon="<i class='" . $this->glyphiconClass . "'></i>";
+		$html="<a".$this->getAttributesDefinition().">" .$glyphicon  . $this->content  . "</a>";
 		return $html;
 	}
 	public function SetLink($Link)
