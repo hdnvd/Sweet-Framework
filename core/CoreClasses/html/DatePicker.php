@@ -13,10 +13,9 @@ use core\CoreClasses\SweetDate;
 class DatePicker extends TextBox
 {
 
-    public function __construct($Name, $Text = null, $Visible = true, $ID = null, $Class = "datepicker", $ReadOnly = false)
+    public function __construct($Name, $Text = null, $Visible = true, $ID = null, $Class = "datepicker", $ReadOnly = true)
     {
         parent::__construct($Name, $Text, $Visible, $ID, $Class, $ReadOnly);
-        $this->setTime(time());
     }
 
     public function getHTML()

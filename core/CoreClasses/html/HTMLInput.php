@@ -11,6 +11,14 @@ use core\CoreClasses\services\FieldType;
  */
 class HTMLInput extends baseHTMLElement{
 private $class,$name,$value,$id,$visible,$readonly,$type,$additonalAttr;
+
+    /**
+     * @return mixed
+     */
+    public function getVisible()
+    {
+        return $this->visible;
+    }
 private $Type;
 private $ValidationPattern;
 private $MinLength;
@@ -41,14 +49,19 @@ private $MinLength;
                 $this->setValidationPattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$');
                 break;
             case FieldType::$MELLICODE:
+                $this->setType("text");
+                $this->setValidationPattern('[0-9]{10,10}');
+                break;
             case FieldType::$TEL:
             case FieldType::$INTEGER:
                 $this->setType("text");
-                $this->setValidationPattern('[0-9]');
+            $this->setValidationPattern('[0-9]{'.$Inf->getMinLength().",".$Inf->getMaxLength()."}");
                 break;
             case FieldType::$MOBILE:
                 $this->setType("text");
-                $this->setValidationPattern('0[0-9]');
+                $this->setValidationPattern('[0][9][0-9]{9,9}');
+                $this->setMinLength(11);
+                $this->setMaxLength(11);
                 break;
             case FieldType::$URL:
                 $this->setType("url");
@@ -103,8 +116,11 @@ private $MinLength;
         $maxLen=$this->getMaxLength();
         $Chars=$this->ValidationPattern;
         if($Chars=="")
-            $Chars=".";
-        return "pattern='" . $Chars . '{' . $minLen . ',' . $maxLen . "}" . "'";
+            if($minLen!="" || $maxLen!="")
+                return "pattern='.{" . $minLen . ',' . $maxLen . "}" . "'";
+            else
+                return "";
+        return "pattern='" . $Chars . "'";
     }
 	public function getHTML() 
 	{

@@ -101,13 +101,12 @@ namespace core\CoreClasses\services;
 			else
 				throw new \Exception("Access To Parameter $name Denied!");
 		}
-        protected function getFieldRowCode($Field,$Title,$PlaceHolder,$InvalidMessage=null)
+        protected function getFieldRowCode($Field,$Title,$PlaceHolder,$InvalidMessage=null,$HelpText=null)
         {
             if($PlaceHolder==null)
                 $PlaceHolder=$Title;
-
             $Group=new Div();
-            $Group->setClass('form-group');
+            $Group->setClass('form-group has-feedback');
             $lblTitle=new FormLabel($Title);
             $lblTitle->SetAttribute("for",$Field->getId());
             $lblTitle->SetClass('control-label col-sm-2');
@@ -117,10 +116,17 @@ namespace core\CoreClasses\services;
             $Field->SetAttribute('placeholder',$PlaceHolder);
             $TitleField->addElement($Field);
             if($InvalidMessage!=null){
+                $Field->SetAttribute('data-error',$InvalidMessage);
                 $InvalidFeedBackDiv=new Div();
                 $InvalidFeedBackDiv->setClass('invalid-feedback');
                 $InvalidFeedBackDiv->addElement(new Lable($InvalidMessage));
                 $TitleField->addElement($InvalidFeedBackDiv);
+            }
+            if($HelpText!=null){
+                $HelpTextDiv=new Div();
+                $HelpTextDiv->setClass('help-block with-errors');
+                $HelpTextDiv->addElement(new Lable($HelpText));
+                $TitleField->addElement($HelpTextDiv);
             }
             $Group->addElement($TitleField);
             return $Group;
@@ -163,7 +169,7 @@ namespace core\CoreClasses\services;
                 return $FieldName;
             }
         }
-        protected function getPaginationPart($PageCount,$ModuleName,$PageName)
+        protected function getPaginationPart($PageCount,$ModuleName,$PageName,$UrlParams=null)
         {
             $Pagination=new UList();
             $Pagination->setClass("pagination");
@@ -178,6 +184,11 @@ namespace core\CoreClasses\services;
                 }
                 $RTR->addParameter(new UrlParameter("pn",$i));
                 $RTR->setAppendToCurrentParams(false);
+                if($UrlParams!=null)
+                {
+                    for ($j=0;$j<count($UrlParams);$j++)
+                        $RTR->addParameter($UrlParams[$j]);
+                }
                 $lbl=new Lable($i);
                 $lnk=new link($RTR->getAbsoluteURL(),$lbl);
                 $Pagination->addElement(new UListElement($lnk));

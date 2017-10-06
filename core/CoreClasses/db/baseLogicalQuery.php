@@ -71,6 +71,8 @@ class baseLogicalQuery extends baseQuery
 
         if($Condition->getLogic()==LogicalOperator::Equal)
             return $this->Equal($Condition->getFiledName(),$Condition->getFiledValue());
+        if($Condition->getLogic()==LogicalOperator::IN)
+            return $this->In($Condition->getFiledName(),$Condition->getFiledValue());
         elseif($Condition->getLogic()==LogicalOperator::LIKE)
             return $this->Like($Condition->getFiledName(),$Condition->getFiledValue());
         elseif($Condition->getLogic()==LogicalOperator::Bigger)
@@ -93,6 +95,29 @@ class baseLogicalQuery extends baseQuery
 		$this->query.= "" . $field . "=" . $value . " ";
 		return $this;
 	}
+
+    /**
+     * @return baseLogicalQuery
+     */
+    public function In($field,array $values)
+    {
+        global $setting_tablePrefix;
+        $field=$this->getFieldString($setting_tablePrefix, $field);
+        $valCount=count($values);
+        $newIndex=count($this->Statements);
+        $AllValues="(";
+        for($i=0;$i<$valCount;$i++)
+        {
+            $values[$i]=$this->getValueString($setting_tablePrefix, $values[$i]);
+            if($i>0)
+                $AllValues.=",";
+            $AllValues.=$values[$i];
+        }
+        $AllValues.=")";
+        $this->Statements[$newIndex]=$field . " IN " . $AllValues . " ";
+        $this->query.= "" . $field . " IN " . $AllValues . " ";
+        return $this;
+    }
 	/**
 	 * @return baseLogicalQuery
 	 */

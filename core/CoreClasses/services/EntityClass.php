@@ -15,10 +15,34 @@ class EntityClass  extends ModuleClass{
     public static $ID='id';
     private $id;
     private $Fields;
+    private $TableFields;
     private $FieldInfos;
     private $TableTitle;
     private $TitleFieldName="id";
 
+
+    protected function addTableField($ID,$Name)
+    {
+        if($this->TableFields==null)
+            $this->TableFields=array();
+        $this->TableFields[$ID]=$Name;
+    }
+    public function getTableField($ID)
+    {
+        if($this->TableFields==null && key_exists($ID,$this->TableFields))
+            return $this->TableFields[$ID];
+        return null;
+    }
+    public function getTableFieldID($Name)
+    {
+//        print_r($this->TableFields);
+        if($this->TableFields==null)
+            return null;
+        $ID=array_search($Name,$this->TableFields);
+        if($ID===false)
+            return -1;
+        return $ID;
+    }
     /**
      * @return string
      */
@@ -204,14 +228,13 @@ class EntityClass  extends ModuleClass{
             $this->id=-1;
         }
     }
-	public function __construct(dbquery $Database=null,$TableName=null)
-	{
-		$this->Database=$Database;
-		$this->TableName=$TableName;
-		$this->setTableTitle($TableName);
-        $this->id=-1;
-        $this->Fields=array('deletetime'=>-1);
-	}
+//	public function __construct(dbquery $Database=null,$TableName=null)
+//	{
+//		$this->TableName=$TableName;
+//		$this->setTableTitle($TableName);
+//        $this->id=-1;
+//        $this->Fields=array('deletetime'=>-1);
+//	}
 	protected function getSelect(array $FieldstoSelect,array $FieldValues,array $Logics=null)
 	{
 		$Database=$this->Database;

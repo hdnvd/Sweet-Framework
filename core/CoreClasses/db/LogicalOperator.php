@@ -13,6 +13,7 @@ class LogicalOperator {
 	CONST Between=3;
     CONST Bigger=4;
     CONST Smaller=5;
+    CONST IN=6;
 }
 
 ?>

@@ -32,17 +32,10 @@ namespace core\CoreClasses\services;
             $Limit=($PageNumber-1)*$PageSize . "," . $PageSize;
             return $Limit;
         }
-        protected function Validate($Field,FieldInfo $FieldInfo)
+        public function Validate($FieldValue,FieldInfo $FieldInfo)
         {
             if($FieldInfo!=null)
-            {
-                if($FieldInfo->getRequired() && $Field=="")
-                    throw new FieldRequiredException();
-                if(strlen($Field)>$FieldInfo->getMaxLength())
-                    throw new FieldTooLargeException();
-                if(strlen($Field)>0 && strlen($Field)<$FieldInfo->getMinLength())
-                    throw new FieldTooSmallException();
-            }
+                $FieldInfo->Validate($FieldValue);
             return true;
         }
         protected function ValidateFieldArray(array $Fields,array $FieldNames)

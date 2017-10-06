@@ -111,6 +111,7 @@ class ComboBox extends baseHTMLElement {
 		$this->setId($name);
 		$this->MotherComboboxAutoLoadMode=ComboBox::$AUTOLOADMODE_ONPAGE;
 		$this->DataLoadJSONURL=null;
+		$this->setDefaultOptionValue(0);
 	}
 
     /**
@@ -128,7 +129,7 @@ class ComboBox extends baseHTMLElement {
 	    else
 	        return $this->selectedID;
 	}
-	public function addOption($Value,$Text,$Class="",$ID="")
+	public function addOption($Value,$Text,$Class="",$ID="",$GroupValue=-1)
 	{
 		array_push($this->OptionValues, trim($Value));
 		array_push($this->Options, $Text);
@@ -139,7 +140,7 @@ class ComboBox extends baseHTMLElement {
 	}
     public function addGroupedOption($GroupValue,$Value,$Text,$Class="",$ID="")
     {
-        $this->addOption($Value,$Text,$Class,$ID);
+        $this->addOption($Value,$Text,$Class,$ID,$GroupValue);
         if(!key_exists($GroupValue,$this->GroupItemsIndexes)){
             $this->GroupItemsIndexes[$GroupValue]=array();
             $this->GroupItemsValues[$GroupValue]=array();
@@ -155,14 +156,17 @@ class ComboBox extends baseHTMLElement {
 		    $html.="multiple ";
 		$html.=">";
         $GroupIDs=array_keys($this->GroupItemsIndexes);
+
+//        if(count($GroupIDs)<=1 || $GroupIDs[$i]>=0)
         for($i=0;$i<count($GroupIDs);$i++)
-            $html.=$this->getGroupOptions($GroupIDs[$i]);
+                $html.=$this->getGroupOptions($GroupIDs[$i]);
 		$html.="\n</select>";
         $html.=$this->getGroupIDs();
 		return $html;
 	}
 	private function getGroupOptions($GroupID)
     {
+
         $optIDs=$this->GroupItemsIndexes[$GroupID];
         $html="";
         //$html="<optgroup label=\"$GroupID\">";
@@ -182,7 +186,7 @@ class ComboBox extends baseHTMLElement {
                 $id="id=\"$tmpID\"";
             if($tmpValue==$this->selectedValue)
                 $selected=" selected=\"selected\" ";
-            $html.="\n\t<option $selected value=\"$tmpValue\" $id $class>$tmpOption</option>";
+            $html.="\n\t<option $selected value=\"$tmpValue\" $id $class gid='".$GroupID."'>$tmpOption</option>";
 
         }
        // $html.="</optgroup>";
@@ -227,7 +231,7 @@ class ComboBox extends baseHTMLElement {
             $html.="\tvar gid=$theMotherCombobox" . ".val();\n";
 
             if($this->MotherComboboxAutoLoadMode==ComboBox::$AUTOLOADMODE_ONPAGE) {
-                $html .= "\tloadSelectItems('" . $this->getName() . "',$varName2" . "[gid]);\n";
+                $html .= "\tloadSelectItemsByGroup('" . $this->getName() . "',gid," . $this->getDefaultOptionValue() .");\n";
             }
             else
             {
@@ -236,6 +240,7 @@ class ComboBox extends baseHTMLElement {
             $html .= "}\n";
 //            $html.=$funcName . "();\n";
             $html .= $theMotherCombobox . ".change($funcName);";
+            $html .= " window.onload=$funcName;";
 
         }
         $html.="</script>";
