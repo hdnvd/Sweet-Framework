@@ -158,7 +158,7 @@ namespace core\CoreClasses\services;
         }
         protected function getFieldCaption($FieldName)
         {
-            if(key_exists($FieldName,$this->FieldCaptions))
+            if($this->FieldCaptions!=null && key_exists($FieldName,$this->FieldCaptions))
                 return $this->FieldCaptions[$FieldName];
             else
             {

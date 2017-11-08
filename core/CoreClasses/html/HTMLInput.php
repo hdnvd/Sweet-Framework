@@ -53,9 +53,12 @@ private $MinLength;
                 $this->setValidationPattern('[0-9]{10,10}');
                 break;
             case FieldType::$TEL:
+                $this->setType("text");
+                $this->setValidationPattern('[0-9]{'.$Inf->getMinLength().",".$Inf->getMaxLength()."}");
+                break;
             case FieldType::$INTEGER:
                 $this->setType("text");
-            $this->setValidationPattern('[0-9]{'.$Inf->getMinLength().",".$Inf->getMaxLength()."}");
+                $this->setValidationPattern('[0-9+-]{'.$Inf->getMinLength().",".$Inf->getMaxLength()."}");
                 break;
             case FieldType::$MOBILE:
                 $this->setType("text");

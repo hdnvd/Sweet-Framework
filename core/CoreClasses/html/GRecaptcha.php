@@ -35,11 +35,16 @@ class GRecaptcha extends Div{
     }
     public function setClass($class)
     {
+
         parent::setClass("g-recaptcha");
+        if(DEFAULT_GRECAPTCHA_SECRET_KEY=="")
+            parent::setClass("");
     }
     public function getValidationStatus()
     {
         // echo "Validating";
+        if(DEFAULT_GRECAPTCHA_SECRET_KEY=="")
+            return GRecaptchaValidationStatus::$VALID;
         if(isset($_POST['g-recaptcha-response']) && !empty($_POST['g-recaptcha-response'])):
             $secret=$this->getRecaptchaSecretKey();
             $cli=new WebClient();
