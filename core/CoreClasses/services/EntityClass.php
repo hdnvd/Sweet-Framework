@@ -323,6 +323,18 @@ class EntityClass  extends ModuleClass{
 //        if(substr($func,0,3)=="set" && $func!="setID" && $func!="setDatabase" && $func!="setTableName" && $func!="setField" && $func!="setSelect" && $func!="setJsFilesDirectory" && $func!="setModuleDirectory" && $func!="setPHPFilesDirectory" && $func!="setTextsDirectory")
 //            return $this->setField(strtolower(substr($func,3)),$params[0]);
     }
+    public function GetArray()
+    {
+        $Array=array();
+        $FieldIDs=array_keys($this->TableFields);
+        $AllCount1 = count($FieldIDs);
+        $Array['id']=$this->getId();
+        for ($i = 0; $i < $AllCount1; $i++) {
+            $field=$this->TableFields[$FieldIDs[$i]];
+            $Array[$field]=$this->getField($field);
+        }
+        return $Array;
+    }
     /**
      * @param QueryLogic $QueryObject
      * @return EntityClass[]
