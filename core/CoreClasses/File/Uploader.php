@@ -33,7 +33,17 @@ class Uploader {
 
         $pinf=pathinfo($newAddress);
         if(!file_exists($pinf['dirname']))
-            throw new DirectoryNotExistsError();
+        {
+            try
+            {
+                mkdir($pinf['dirname'],0777,true);
+            }
+            catch (\Exception $ex)
+            {
+
+                throw new DirectoryNotExistsError();
+            }
+        }
     	if(file_exists($newAddress) && $Override==false)
         {
             throw  new FileExistsError();

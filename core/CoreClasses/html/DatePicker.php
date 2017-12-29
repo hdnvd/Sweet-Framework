@@ -13,9 +13,28 @@ use core\CoreClasses\SweetDate;
 class DatePicker extends TextBox
 {
 
+    private $Hour,$Minute;
+
+    /**
+     * @param mixed $Hour
+     */
+    public function setHour($Hour)
+    {
+        $this->Hour = $Hour;
+    }
+
+    /**
+     * @param mixed $Minute
+     */
+    public function setMinute($Minute)
+    {
+        $this->Minute = $Minute;
+    }
     public function __construct($Name, $Text = null, $Visible = true, $ID = null, $Class = "datepicker", $ReadOnly = true)
     {
         parent::__construct($Name, $Text, $Visible, $ID, $Class, $ReadOnly);
+        $this->Hour="11";
+        $this->Minute="48";
     }
 
     public function getHTML()
@@ -27,19 +46,23 @@ class DatePicker extends TextBox
 
     public function getTime()
     {
-        return DatePicker::getTimeFromText($this->getValue());
+        return DatePicker::getTimeFromText($this->getValue(),$this->Hour,$this->Minute);
     }
 
     public function setTime($time)
     {
-        $sweetDate = new SweetDate(false, true);
+        date_default_timezone_set("Asia/Tehran");
+        $sweetDate = new SweetDate(false, true, 'Asia/Tehran');
         $dt = $sweetDate->date("Y/m/d", $time);
         $this->setValue($dt);
     }
 
-    public static function getTimeFromText($Date)
+    public static function getTimeFromText($Date,$Hour="11",$Minute="48")
     {
-        $sweetDate = new SweetDate();
+
+        date_default_timezone_set("Asia/Tehran");
+        $sweetDate = new SweetDate(true, true, 'Asia/Tehran');
+//        $sweetDate = new SweetDate();
         $Date = trim($Date);
         $day = null;
         $year = null;
@@ -52,7 +75,7 @@ class DatePicker extends TextBox
         if ($day==null)
             $time=0;
         else
-            $time = $sweetDate->mktime("11", "48", "0", $month, $day, $year);
+            $time = $sweetDate->mktime($Hour, $Minute, "0", $month, $day, $year);
         return $time;
     }
 }

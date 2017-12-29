@@ -275,6 +275,8 @@ class EntityClass  extends ModuleClass{
     }
     protected function setField($FieldName,$Value)
     {
+        if(!is_array($this->Fields))
+            $this->Fields=array();
        $this->Fields[$FieldName]=$Value;
     }
     public function Remove()
