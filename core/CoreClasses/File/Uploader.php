@@ -26,7 +26,7 @@ class Uploader {
                 if(strtolower($fileType)==strtolower($fileTypes[$i]))
                     $extensionMatched=true;
             if(!$extensionMatched)
-                throw new FileTypeError();
+                throw new FileTypeError("File Type Is : $fileType");
         }
         if(filesize($tmpFile)>($maxSize*1024))
             throw new FileSizeError();

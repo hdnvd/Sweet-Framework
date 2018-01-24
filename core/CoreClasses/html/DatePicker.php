@@ -59,24 +59,7 @@ class DatePicker extends TextBox
 
     public static function getTimeFromText($Date,$Hour="11",$Minute="48")
     {
-
-        date_default_timezone_set("Asia/Tehran");
-        $sweetDate = new SweetDate(true, true, 'Asia/Tehran');
-//        $sweetDate = new SweetDate();
-        $Date = trim($Date);
-        $day = null;
-        $year = null;
-        $month = null;
-        if (substr($Date, 4, 1) == "/" && substr($Date, 7, 1) == "/") {
-            $year = substr($Date, 0, 4);
-            $month = substr($Date, 5, 2);
-            $day = substr($Date, 8, 2);
-        }
-        if ($day==null)
-            $time=0;
-        else
-            $time = $sweetDate->mktime($Hour, $Minute, "0", $month, $day, $year);
-        return $time;
+        return SweetDate::getTimeFromDateText($Date,$Hour,$Minute,'/');
     }
 }
 

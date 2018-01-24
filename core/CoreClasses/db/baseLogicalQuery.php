@@ -99,6 +99,18 @@ class baseLogicalQuery extends baseQuery
     /**
      * @return baseLogicalQuery
      */
+    public function ISNULL($field)
+    {
+        global $setting_tablePrefix;
+        $field=$this->getFieldString($setting_tablePrefix, $field);
+        $newIndex=count($this->Statements);
+        $this->Statements[$newIndex]=$field . " IS NULL ";
+        $this->query.= $field . " IS NULL ";
+        return $this;
+    }
+    /**
+     * @return baseLogicalQuery
+     */
     public function In($field,array $values)
     {
         global $setting_tablePrefix;
