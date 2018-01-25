@@ -79,6 +79,7 @@ namespace core\CoreClasses\services;
                 $q->addOrderBy("LENGTH(".sfman_pageinfoEntity::$SENTENCEINURL.")",true);
                 $Ent=$Ent->FindOne($q);
             }
+            $dbAccessor->close_connection();
             return $Ent;
         }
 		public function getThemePage($Action="load")
