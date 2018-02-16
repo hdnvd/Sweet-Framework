@@ -133,8 +133,9 @@ class selectQuery extends baseLogicalQuery{
 			//End OF LIMIT
 			
 		}
-		else 
-			$query="--Query Is Not Complete!";
+		else
+            $this->query="--Query Is Not Complete!";
+//		echo "\r\n" . $this->query . "\r\n";
 		return $this->query;
 	}
 	

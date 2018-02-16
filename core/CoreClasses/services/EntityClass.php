@@ -353,7 +353,7 @@ class EntityClass  extends ModuleClass{
         }
         $this->SelectQuery=$this->getDatabase()->Select(array($resFields))->From($this->getTableName())->Where()->Smaller("deletetime", "1");
         $this->fillSelectParams($QueryObject);
-//        echo $this->SelectQuery->getQueryString() . "\n";
+//        echo $this->SelectQuery->getQueryString() . "\n<br>";
 //        die();
         $results= $this->SelectQuery->ExecuteAssociated();
         $Objects=array();

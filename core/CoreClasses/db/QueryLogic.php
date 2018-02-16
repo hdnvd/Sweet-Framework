@@ -85,12 +85,16 @@ class QueryLogic {
         $this->Limit = $Limit;
     }
 
-    public function __construct()
+    public function __construct(array $Conditions=[],array $OrderByFields=[],array $IsDescendings=[])
     {
         $this->IsDescendings=array();
         $this->OrderByFields=array();
         $this->Conditions=array();
         $this->ResultFields=array();
+        $this->Conditions=$Conditions;
+        $this->OrderByFields=$OrderByFields;
+        $this->IsDescendings=$IsDescendings;
+
     }
 
     /**

@@ -57,7 +57,7 @@ class DatePicker extends TextBox
         $this->setValue($dt);
     }
 
-    public static function getTimeFromText($Date,$Hour="11",$Minute="48")
+    public static function getTimeFromText($Date,$Hour="0",$Minute="0")
     {
         return SweetDate::getTimeFromDateText($Date,$Hour,$Minute,'/');
     }
