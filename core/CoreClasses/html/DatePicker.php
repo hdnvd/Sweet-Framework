@@ -33,8 +33,8 @@ class DatePicker extends TextBox
     public function __construct($Name, $Text = null, $Visible = true, $ID = null, $Class = "datepicker", $ReadOnly = true)
     {
         parent::__construct($Name, $Text, $Visible, $ID, $Class, $ReadOnly);
-        $this->Hour="11";
-        $this->Minute="48";
+        $this->Hour="0";
+        $this->Minute="0";
     }
 
     public function getHTML()

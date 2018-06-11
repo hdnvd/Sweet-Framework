@@ -71,6 +71,8 @@ class baseLogicalQuery extends baseQuery
 
         if($Condition->getLogic()==LogicalOperator::Equal)
             return $this->Equal($Condition->getFiledName(),$Condition->getFiledValue());
+        if($Condition->getLogic()==LogicalOperator::NotEqual)
+            return $this->NotEqual($Condition->getFiledName(),$Condition->getFiledValue());
         if($Condition->getLogic()==LogicalOperator::IN)
             return $this->In($Condition->getFiledName(),$Condition->getFiledValue());
         elseif($Condition->getLogic()==LogicalOperator::LIKE)
@@ -81,6 +83,19 @@ class baseLogicalQuery extends baseQuery
             return $this->Smaller($Condition->getFiledName(),$Condition->getFiledValue());
         else
             throw new NotImplementedException();
+    }
+    /**
+     * @return baseLogicalQuery
+     */
+    public function NotEqual($field,$value)
+    {
+        global $setting_tablePrefix;
+        $field=$this->getFieldString($setting_tablePrefix, $field);
+        $value=$this->getValueString($setting_tablePrefix, $value);
+        $newIndex=count($this->Statements);
+        $this->Statements[$newIndex]=$field . "!=" . $value . " ";
+        $this->query.= "" . $field . "!=" . $value . " ";
+        return $this;
     }
 	/**
 	 * @return baseLogicalQuery

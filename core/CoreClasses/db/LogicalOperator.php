@@ -14,6 +14,7 @@ class LogicalOperator {
     CONST Bigger=4;
     CONST Smaller=5;
     CONST IN=6;
+    CONST NotEqual=7;
 }
 
 ?>

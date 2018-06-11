@@ -169,7 +169,7 @@ namespace core\CoreClasses\services;
                 return $FieldName;
             }
         }
-        protected function getPaginationPart($PageCount,$ModuleName,$PageName,$UrlParams=null)
+        protected function getPaginationPart($PageCount,$ModuleName,$PageName,$UrlParams=null,$AppendParams=false)
         {
             $Pagination=new UList();
             $Pagination->setClass("pagination");
@@ -183,7 +183,7 @@ namespace core\CoreClasses\services;
                     $RTR=new AppRooter($ModuleName,$PageName);
                 }
                 $RTR->addParameter(new UrlParameter("pn",$i));
-                $RTR->setAppendToCurrentParams(false);
+                $RTR->setAppendToCurrentParams($AppendParams);
                 if($UrlParams!=null)
                 {
                     for ($j=0;$j<count($UrlParams);$j++)

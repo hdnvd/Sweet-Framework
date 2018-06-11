@@ -9,9 +9,10 @@ namespace core\CoreClasses\Exception;
  */
 class DataNotFoundException extends SweetException {
     private $Module,$Page,$Action;
+    private $ItemID;
 	public function __construct($message = null, $code = 0, Exception $previous = null,$ErrorMaker="unknown")
 	{
-		parent::__construct("DataNotFoundException:" . $message, $code, $previous,$ErrorMaker);
+		parent::__construct($message, $code, $previous,$ErrorMaker);
 	}
 
 	public function getModule()
