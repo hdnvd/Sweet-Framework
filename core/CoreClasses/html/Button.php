@@ -45,7 +45,6 @@ class Button extends baseHTMLElement {
 	}
 	public function getHTML()
 	{
-
         $glyphicon="";
         if($this->glyphiconClass!=null)
             $glyphicon="<i class='" . $this->glyphiconClass . "'></i>";
