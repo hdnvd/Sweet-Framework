@@ -228,13 +228,6 @@ class EntityClass  extends ModuleClass{
             $this->id=-1;
         }
     }
-//	public function __construct(dbquery $Database=null,$TableName=null)
-//	{
-//		$this->TableName=$TableName;
-//		$this->setTableTitle($TableName);
-//        $this->id=-1;
-//        $this->Fields=array('deletetime'=>-1);
-//	}
 	protected function getSelect(array $FieldstoSelect,array $FieldValues,array $Logics=null)
 	{
 		$Database=$this->Database;
@@ -398,18 +391,25 @@ class EntityClass  extends ModuleClass{
     }
     protected function fillSelectParams(QueryLogic $QueryObject)
     {
+        $this->SelectQuery=$this->AddSelectParamsToQuery($this->SelectQuery,$QueryObject);
+
+        $this->SelectQuery=$this->SelectQuery->AndLogic()->Smaller(new DBField($this->getTableName() . ".deletetime",true), "1");
+    }
+
+    protected function AddSelectParamsToQuery(selectQuery $Query,QueryLogic $QueryObject)
+    {
         $conds=$QueryObject->getConditions();
         if($conds!=null)
             for($i=0;$i<count($conds);$i++)
-                $this->SelectQuery=$this->SelectQuery->AndLogic()->AddFieldCondition($conds[$i]);
+                $Query=$Query->AndLogic()->AddFieldCondition($conds[$i]);
         $OrderByFields=$QueryObject->getOrderByFields();
         $IsDescendings=$QueryObject->getIsDescendings();
         for($i=0;$OrderByFields!==null && $i<count($OrderByFields);$i++)
-            $this->SelectQuery=$this->SelectQuery->AddOrderBy($OrderByFields[$i], $IsDescendings[$i]);
+            $Query=$Query->AddOrderBy($OrderByFields[$i], $IsDescendings[$i]);
         $Limit=$QueryObject->getLimit();
         if($Limit!==null)
-            $this->SelectQuery=$this->SelectQuery->setLimit($Limit);
-        $this->SelectQuery=$this->SelectQuery->AndLogic()->Smaller(new DBField($this->getTableName() . ".deletetime",true), "1");
+            $Query=$Query->setLimit($Limit);
+        return $Query;
     }
     private function InsertSave()
     {
