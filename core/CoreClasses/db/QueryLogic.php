@@ -53,6 +53,16 @@ class QueryLogic {
     {
         array_push($this->ResultFields,$FieldName);
     }
+
+    public function isFieldInConditions($FieldName)
+    {
+        foreach ($this->Conditions as $condition)
+        {
+            if(trim(strtolower($condition->getFiledName()))==strtolower($FieldName))
+                return true;
+        }
+        return false;
+    }
     /**
      * @return FieldCondition[]
      */
