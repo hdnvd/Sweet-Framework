@@ -24,7 +24,8 @@ class link extends baseHTMLElement{
 		$this->content=$content;
 		$this->showMode=$showMode;
 		$this->setClass($class);
-		$this->setId($id);
+		if($id!=null)
+		    $this->setId($id);
 		$this->setGlyphiconClass(null);
 		
 	}

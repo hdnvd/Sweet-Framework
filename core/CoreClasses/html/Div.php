@@ -26,6 +26,15 @@ class Div extends baseHTMLElement {
 		$html.="</div>";
 		return $html;
 	}
+	function __construct($ID=null,$Class=null)
+    {
+//        parent::__construct();
+        if($ID!=null)
+            $this->setId($ID);
+        if($Class!=null)
+            $this->setClass($Class);
+
+    }
 }
 
 ?>
