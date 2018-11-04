@@ -49,13 +49,20 @@ class ListTable extends baseHTMLElement {
 		$this->ColumnsCount=$ColumnsCount;
 	}
 	/**
-	 * @tutorial adds An Element To Queu
+	 * @tutorial adds An Element To Queue
 	 * @param baseHTMLElement $Element
+	 * @param int $ColSpan
+	 * @param string $ID
+	 * @param string $Class
 	 */
-	public function addElement(baseHTMLElement $Element,$Colspan=1)
+	public function addElement(baseHTMLElement $Element,$ColSpan=1,$ID=null,$Class=null)
 	{
 		array_push($this->elements,$Element);
-		array_push($this->elementColspans,$Colspan);
+		array_push($this->elementColspans,$ColSpan);
+		if($ID!=null)
+		    $this->setLastElementID($ID);
+        if($Class!=null)
+		    $this->setLastElementClass($Class);
 	}
 	public function setLastElementID($ID)
 	{
