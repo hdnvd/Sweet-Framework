@@ -24,7 +24,7 @@ class FileUploadBox extends HTMLInput {
 	public function setFileTypes($FileTypes)
 	{
 	    $this->FileTypes = $FileTypes;
-	    parent::addAdditonalAttr("accept=\"$FileTypes\"");
+	    parent::addAdditonalAttr("accept",$FileTypes);
 	}
 	public function getSelectedFilesName()
 	{
