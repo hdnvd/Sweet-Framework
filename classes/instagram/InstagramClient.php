@@ -39,6 +39,7 @@ class InstagramClient
             $result[$i]['url']=$post->images->standard_resolution->url;
             $result[$i]['thumbnailurl']=$post->images->thumbnail->url;
             $result[$i]['caption']=$post->caption->text;
+            $result[$i]['id']=$post->id;
             $i++;
         }
         return $result;
