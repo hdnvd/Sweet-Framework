@@ -40,5 +40,6 @@ class InstagramClient
             $result[$i]['thumbnailurl']=$post->images->thumbnail->url;
             $i++;
         }
+        return $result;
     }
 }
