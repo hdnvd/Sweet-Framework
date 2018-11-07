@@ -38,6 +38,7 @@ class InstagramClient
         foreach ($return->data as $post) {
             $result[$i]['url']=$post->images->standard_resolution->url;
             $result[$i]['thumbnailurl']=$post->images->thumbnail->url;
+            $result[$i]['caption']=$post->caption->text;
             $i++;
         }
         return $result;
