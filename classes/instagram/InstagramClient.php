@@ -26,15 +26,19 @@ class InstagramClient
         curl_setopt( $connection_c, CURLOPT_TIMEOUT, 20 );
         $json_return = curl_exec( $connection_c ); // connect and get json data
         curl_close( $connection_c ); // close connection
-        echo $json_return;
+//        echo $json_return;
         return json_decode( $json_return ); // decode and return
     }
     public function getSelfImages()
     {
         $user_id = 'self'; // or use string 'self' to get your own media
         $return = $this->rudr_instagram_api_curl_connect("https://api.instagram.com/v1/users/" . $user_id . "/media/recent?access_token=" . $this->AccessToken);
+        $result=[];
+        $i=0;
         foreach ($return->data as $post) {
-            echo '<a href="' . $post->images->standard_resolution->url . '" class="fancybox"><img src="' . $post->images->thumbnail->url . '" /></a>';
+            $result[$i]['url']=$post->images->standard_resolution->url;
+            $result[$i]['thumbnailurl']=$post->images->thumbnail->url;
+            $i++;
         }
     }
 }
