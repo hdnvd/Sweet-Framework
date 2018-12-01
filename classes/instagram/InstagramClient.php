@@ -1,4 +1,5 @@
 <?php
+namespace classes\instagram;
 /**
  * Created by PhpStorm.
  * User: hduser

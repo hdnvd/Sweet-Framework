@@ -1,5 +1,5 @@
 <?php
-
+namespace classes\Telegram;
 /**
  * This class will have all the methods needed
  * for the communication with the bot
@@ -10,6 +10,8 @@
 
 class TelegramClient
 {
+    public static $PHOTOSENDMODE_UPLOAD=1;
+    public static $PHOTOSENDMODE_LINK=2;
     private $requestUrl;
     private $BotToken;
     public function __construct($BotToken)
@@ -59,18 +61,22 @@ if(substr($chat_id, 0,1)!="@")
     }
 
     public function sendPhoto($chat_id, $photo, $caption,
-                              $reply_to_message_id, $reply_markup)
+                              $reply_to_message_id, $reply_markup,$SendMode)
     {
         if(substr($chat_id, 0,1)!="@")
             $chat_id=urlencode($chat_id);
         $url = $this->requestUrl . "sendPhoto";
+//        echo $photo;
+        if($SendMode==TelegramClient::$PHOTOSENDMODE_UPLOAD)
+            $photo=new \CURLFile($photo);
         $data = array(
             'chat_id' => $chat_id,
-            'photo' => new CURLFile($photo),
+            'photo' => $photo,
             'caption' => $caption,
             'reply_to_message_id' => urlencode($reply_to_message_id),
             'reply_markup' => urlencode($reply_markup)
         );
+
 
         $this->curlMethod($url, $data,true);
     }
