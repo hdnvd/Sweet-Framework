@@ -122,6 +122,9 @@ class QueryLogic {
      */
     public function addCondition(FieldCondition $condition)
     {
+        if($condition->getFiledValue()=="%%" && $condition->getLogic()==LogicalOperator::LIKE)
+            return;
+
         array_push($this->Conditions,$condition);
     }
 

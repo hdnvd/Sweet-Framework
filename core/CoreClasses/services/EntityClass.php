@@ -400,8 +400,18 @@ class EntityClass  extends ModuleClass{
     {
         $conds=$QueryObject->getConditions();
         if($conds!=null)
+        {
+            $Query->AndLogic()->OpenParenthesis();
             for($i=0;$i<count($conds);$i++)
-                $Query=$Query->AndLogic()->AddFieldCondition($conds[$i]);
+            {
+                if($i>0)
+                    $Query=$Query->AndLogic();
+                $Query->AddFieldCondition($conds[$i]);
+            }
+
+            $Query->CloseParenthesis();
+        }
+
         $OrderByFields=$QueryObject->getOrderByFields();
         $IsDescendings=$QueryObject->getIsDescendings();
         for($i=0;$OrderByFields!==null && $i<count($OrderByFields);$i++)
