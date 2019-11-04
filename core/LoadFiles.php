@@ -1,5 +1,5 @@
 <?php
-
+require DEFAULT_FRAMEWORKPATH . 'classes/vendor/autoload.php';
 $path=array();
 function getsubdirectories($Root,$class)
 {
